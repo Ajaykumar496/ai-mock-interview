@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mock Interview — AI Practice</title>
+    <script src="https://cdn.jsdelivr.net/npm/livekit-client/dist/livekit-client.umd.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #FAF9F6;
+            --bg-card: #FFFFFF;
+            --bg-warm: #F3EFEA;
+            --bg-input: #F7F5F2;
+            --text: #1C1C1C;
+            --text-secondary: #5A5A5A;
+            --text-muted: #9A9A9A;
+            --green: #2B6B45;
+            --green-light: #357A52;
+            --green-bg: rgba(43,107,69,0.05);
+            --green-border: rgba(43,107,69,0.12);
+            --amber: #B8863B;
+            --red: #B34040;
+            --border: #E8E4DF;
+            --border-light: #F0ECE7;
+            --shadow-s: 0 1px 2px rgba(0,0,0,0.04);
+            --shadow-m: 0 2px 12px rgba(0,0,0,0.05);
+            --shadow-l: 0 8px 30px rgba(0,0,0,0.07);
+            --r: 8px;
+            --r-lg: 14px;
+            --serif: 'Instrument Serif', Georgia, serif;
+            --sans: 'DM Sans', system-ui, sans-serif;
+        }
+
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: var(--sans);
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ── Topbar ─────────────────────────────────── */
+        .topbar {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+            height: 52px;
+            background: rgba(250,249,246,0.88);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border-bottom: 1px solid var(--border-light);
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 24px;
+        }
+
+        .topbar-brand {
+            display: flex; align-items: center; gap: 9px;
+            font-family: var(--serif);
+            font-size: 17px; color: var(--text);
+        }
+
+        .topbar-logo {
+            width: 26px; height: 26px;
+            background: var(--green);
+            border-radius: 6px;
+            display: grid; place-items: center;
+            color: #fff; font-family: var(--serif); font-size: 15px;
+        }
+
+        .topbar-right {
+            display: flex; align-items: center; gap: 7px;
+            font-size: 12px; color: var(--text-muted); font-weight: 500;
+        }
+
+        .dot { width: 6px; height: 6px; border-radius: 50%; }
+        .dot.on  { background: var(--green); }
+        .dot.mid { background: var(--amber); animation: pulse-dot 1s infinite; }
+        .dot.off { background: var(--text-muted); }
+
+        @keyframes pulse-dot { 0%,100%{opacity:1} 50%{opacity:.35} }
+
+        /* ── Layout ─────────────────────────────────── */
+        .page {
+            padding-top: 52px;
+            min-height: 100vh;
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        .wrap { width: 100%; max-width: 500px; padding: 36px 20px; }
+
+        /* ── Welcome ────────────────────────────────── */
+        #welcome {
+            animation: rise .45s cubic-bezier(.22,1,.36,1);
+        }
+
+        @keyframes rise {
+            from { opacity:0; transform:translateY(14px) }
+            to   { opacity:1; transform:translateY(0) }
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--r-lg);
+            box-shadow: var(--shadow-m);
+        }
+
+        .welcome-card {
+            padding: 44px 38px 38px;
+        }
+
+        .welcome-eyebrow {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            color: var(--green);
+            margin-bottom: 14px;
+        }
+
+        .welcome-card h1 {
+            font-family: var(--serif);
+            font-size: 32px;
+            font-weight: 400;
+            line-height: 1.2;
+            color: var(--text);
+            margin-bottom: 10px;
+        }
+
+        .welcome-card .intro {
+            font-size: 15px;
+            line-height: 1.7;
+            color: var(--text-secondary);
+            margin-bottom: 28px;
+        }
+
+        .tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 30px; }
+
+        .tag {
+            padding: 5px 11px;
+            border-radius: 5px;
+            font-size: 11.5px;
+            font-weight: 500;
+            letter-spacing: .15px;
+            background: var(--bg-warm);
+            color: var(--text-secondary);
+        }
+
+        .field-label {
+            display: block;
+            font-size: 12.5px; font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 5px;
+        }
+
+        .field-input {
+            width: 100%;
+            padding: 12px 14px;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: var(--r);
+            font-family: var(--sans);
+            font-size: 15px; color: var(--text);
+            outline: none;
+            transition: border-color .2s, box-shadow .2s;
+        }
+
+        .field-input:focus {
+            border-color: var(--green);
+            box-shadow: 0 0 0 3px rgba(43,107,69,.07);
+        }
+
+        .field-input::placeholder { color: var(--text-muted); }
+
+        .btn {
+            width: 100%;
+            padding: 13px;
+            margin-top: 14px;
+            border: none;
+            border-radius: var(--r);
+            background: var(--green);
+            color: #fff;
+            font-family: var(--sans);
+            font-size: 14.5px; font-weight: 600;
+            cursor: pointer;
+            transition: background .18s, transform .1s;
+        }
+
+        .btn:hover { background: var(--green-light); }
+        .btn:active { transform: scale(.99); }
+        .btn:disabled { opacity:.55; cursor:not-allowed; transform:none; }
+
+        .fine-print {
+            text-align: center;
+            margin-top: 16px;
+            font-size: 11.5px;
+            color: var(--text-muted);
+        }
+
+        /* ── Interview ──────────────────────────────── */
+        #interview { display: none; animation: rise .4s cubic-bezier(.22,1,.36,1); }
+
+        .stack { display: flex; flex-direction: column; gap: 12px; }
+
+        /* interviewer row */
+        .interviewer-row {
+            padding: 22px 24px;
+            display: flex; align-items: center; gap: 16px;
+        }
+
+        .avatar {
+            width: 54px; height: 54px;
+            border-radius: 50%;
+            background: linear-gradient(140deg, var(--green) 0%, #3E9A62 100%);
+            display: grid; place-items: center;
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .avatar-char {
+            font-family: var(--serif);
+            font-size: 23px; color: #fff;
+        }
+
+        .avatar.speaking::after {
+            content: "";
+            position: absolute; inset: -5px;
+            border: 2px solid var(--green);
+            border-radius: 50%;
+            animation: ring-out 1.6s ease infinite;
+        }
+
+        @keyframes ring-out {
+            0%   { transform:scale(1); opacity:.35 }
+            100% { transform:scale(1.18); opacity:0 }
+        }
+
+        .iv-name {
+            font-family: var(--serif);
+            font-size: 17px; margin-bottom: 1px;
+        }
+
+        .iv-role { font-size: 12.5px; color: var(--text-muted); }
+
+        .iv-pill {
+            margin-left: auto;
+            padding: 4px 10px;
+            border-radius: 5px;
+            font-size: 11.5px; font-weight: 500;
+            background: var(--bg-warm);
+            color: var(--text-secondary);
+            white-space: nowrap;
+        }
+
+        .iv-pill[data-s="speaking"]  { background:var(--green-bg); color:var(--green); }
+        .iv-pill[data-s="listening"] { background:rgba(184,134,59,.07); color:var(--amber); }
+
+        /* progress strip */
+        .progress-strip {
+            padding: 14px 22px;
+            display: flex; align-items: center; gap: 14px;
+        }
+
+        .bars { display: flex; gap: 5px; flex: 1; }
+
+        .bar {
+            flex: 1; height: 3.5px;
+            border-radius: 2px;
+            background: var(--border);
+            overflow: hidden;
+        }
+
+        .bar.done { background: var(--green); }
+        .bar.active { background: var(--green); position: relative; }
+
+        .bar.active::after {
+            content: "";
+            position: absolute; inset: 0;
+            background: linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent);
+            animation: slide 2s linear infinite;
+        }
+
+        @keyframes slide { from{transform:translateX(-100%)} to{transform:translateX(100%)} }
+
+        .progress-label { font-size: 11.5px; font-weight: 500; color: var(--text-muted); }
+        .progress-timer { font-size: 12.5px; font-weight: 600; color: var(--text-secondary); font-variant-numeric: tabular-nums; }
+
+        /* transcript */
+        .transcript-wrap { overflow: hidden; }
+
+        .transcript-head {
+            padding: 12px 22px;
+            border-bottom: 1px solid var(--border-light);
+            font-size: 11px; font-weight: 600;
+            text-transform: uppercase; letter-spacing: .8px;
+            color: var(--text-muted);
+        }
+
+        .transcript {
+            padding: 14px 22px;
+            max-height: 260px;
+            overflow-y: auto;
+            scroll-behavior: smooth;
+        }
+
+        .transcript:empty::before {
+            content: "The conversation will appear here…";
+            color: var(--text-muted); font-size: 13.5px; font-style: italic;
+        }
+
+        .transcript::-webkit-scrollbar { width: 4px; }
+        .transcript::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+        .bubble {
+            margin-bottom: 12px;
+            animation: pop .22s ease;
+        }
+
+        @keyframes pop {
+            from { opacity:0; transform:translateY(5px) }
+            to   { opacity:1; transform:translateY(0) }
+        }
+
+        .bubble-who {
+            font-size: 10.5px; font-weight: 600;
+            text-transform: uppercase; letter-spacing: .5px;
+            margin-bottom: 2px;
+        }
+
+        .bubble.agent .bubble-who { color: var(--green); }
+        .bubble.user  .bubble-who { color: var(--amber); }
+
+        .bubble-text {
+            font-size: 13.5px; line-height: 1.65; color: var(--text);
+        }
+
+        .bubble.user .bubble-text { color: var(--text-secondary); }
+
+        /* controls */
+        .ctrls { display: flex; gap: 8px; }
+
+        .ctrl-btn {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: var(--r);
+            background: var(--bg-card);
+            font-family: var(--sans);
+            font-size: 13.5px; font-weight: 500;
+            color: var(--text);
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center; gap: 7px;
+            transition: background .15s, border-color .15s;
+        }
+
+        .ctrl-btn:hover { background: var(--bg-warm); }
+
+        .ctrl-btn.muted { background: var(--red); border-color: var(--red); color: #fff; }
+
+        .ctrl-end { color: var(--red); }
+        .ctrl-end:hover { background: rgba(179,64,64,.04); border-color: rgba(179,64,64,.18); }
+
+        /* ── Responsive ─────────────────────────────── */
+        @media (max-width: 520px) {
+            .welcome-card { padding: 32px 24px 28px; }
+            .welcome-card h1 { font-size: 26px; }
+            .interviewer-row { flex-wrap: wrap; }
+            .iv-pill { margin-left: 0; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Topbar -->
+<header class="topbar">
+    <div class="topbar-brand">
+        <div class="topbar-logo">M</div>
+        Interview
+    </div>
+    <div class="topbar-right">
+        <span class="dot off" id="nav-dot"></span>
+        <span id="nav-text">Ready</span>
+    </div>
+</header>
+
+<main class="page">
+<div class="wrap">
+
+    <!-- ═══ Welcome ═══ -->
+    <div id="welcome">
+        <div class="card welcome-card">
+            <div class="welcome-eyebrow">AI Interview Coach</div>
+            <h1>Prepare for your<br>next big interview</h1>
+            <p class="intro">
+                Maya will walk you through a realistic mock interview,
+                from introductions to experience deep-dives. Speak naturally —
+                she'll adapt to your pace.
+            </p>
+            <div class="tags">
+                <span class="tag">Voice conversation</span>
+                <span class="tag">STAR method</span>
+                <span class="tag">8–12 min session</span>
+            </div>
+            <label class="field-label" for="nameIn">Your name</label>
+            <input class="field-input" id="nameIn" type="text" placeholder="e.g. Mike" autofocus>
+            <button class="btn" id="startBtn" onclick="go()">Begin Interview</button>
+        </div>
+        <p class="fine-print">Microphone required. Nothing is recorded or stored.</p>
+    </div>
+
+    <!-- ═══ Interview ═══ -->
+    <div id="interview">
+        <div class="stack">
+
+            <div class="card interviewer-row">
+                <div class="avatar" id="av"><span class="avatar-char">M</span></div>
+                <div>
+                    <div class="iv-name">Maya</div>
+                    <div class="iv-role">AI Interview Coach</div>
+                </div>
+                <div class="iv-pill" id="agentPill" data-s="">Connecting</div>
+            </div>
+
+            <div class="card progress-strip">
+                <div class="bars">
+                    <div class="bar active" id="b1"></div>
+                    <div class="bar" id="b2"></div>
+                    <div class="bar" id="b3"></div>
+                </div>
+                <span class="progress-label" id="stageLabel">Introduction</span>
+                <span class="progress-timer" id="timer">00:00</span>
+            </div>
+
+            <div class="card transcript-wrap">
+                <div class="transcript-head">Live Transcript</div>
+                <div class="transcript" id="tx"></div>
+            </div>
+
+            <div class="ctrls">
+                <button class="ctrl-btn" id="micBtn" onclick="mic()">🎤 Mute</button>
+                <button class="ctrl-btn ctrl-end" onclick="end()">End Interview</button>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+</main>
+
+<script>
+const LK_URL = "{{ livekit_url }}";
+let room, muted = false, timerInt, t0;
+
+async function go() {
+    const name = nameIn.value.trim() || "Candidate";
+    startBtn.disabled = true;
+    startBtn.textContent = "Connecting…";
+    nav("mid","Connecting");
+
+    try {
+        const r = await fetch("/token", {
+            method:"POST",
+            headers:{"Content-Type":"application/json"},
+            body: JSON.stringify({ name })
+        });
+        const d = await r.json();
+
+        room = new LivekitClient.Room({
+            audioCaptureDefaults:{echoCancellation:true,noiseSuppression:true},
+            adaptiveStream:true
+        });
+        wire(room);
+        await room.connect(d.url, d.token);
+        await room.localParticipant.setMicrophoneEnabled(true);
+
+        welcome.style.display = "none";
+        interview.style.display = "block";
+        nav("on","In session");
+        t0 = Date.now();
+        timerInt = setInterval(tick, 1000);
+    } catch(e) {
+        console.error(e);
+        alert("Could not connect.\n\n• Is the agent running?  python agent.py dev\n• Check your .env keys.");
+        startBtn.disabled = false;
+        startBtn.textContent = "Begin Interview";
+        nav("off","Ready");
+    }
+}
+
+function wire(rm) {
+    const E = LivekitClient.RoomEvent;
+
+    rm.on(E.TrackSubscribed, (trk) => {
+        if (trk.kind === "audio") {
+            const el = trk.attach(); el.id = "spk";
+            document.body.appendChild(el);
+        }
+    });
+
+    rm.on(E.TrackUnsubscribed, (trk) => trk.detach().forEach(e => e.remove()));
+
+    rm.on(E.ParticipantAttributesChanged, (_, p) => {
+        if (!p.isAgent) return;
+        const s = p.attributes?.["lk.agent.state"];
+        const av = document.getElementById("av");
+        const pill = agentPill;
+
+        av.classList.toggle("speaking", s === "speaking");
+
+        if (s === "speaking")      { pill.textContent = "Speaking";   pill.dataset.s = "speaking"; }
+        else if (s === "listening") { pill.textContent = "Listening";  pill.dataset.s = "listening"; }
+        else if (s === "thinking")  { pill.textContent = "Thinking…";  pill.dataset.s = ""; }
+    });
+
+    rm.on(E.TranscriptionReceived, (segs, p) => {
+        segs.forEach(seg => {
+            const who = p?.isAgent ? "agent" : "user";
+            transcript(who, seg.text, seg.final);
+            if (p?.isAgent) detectStage(seg.text);
+        });
+    });
+
+    rm.on(E.Disconnected, () => { nav("off","Ended"); clearInterval(timerInt); });
+    rm.on(E.Reconnecting,  () => nav("mid","Reconnecting"));
+    rm.on(E.Reconnected,   () => nav("on","In session"));
+}
+
+function transcript(who, text, fin) {
+    const box = tx;
+    const id = who === "agent" ? "ca" : "cu";
+    let el = document.getElementById(id);
+    if (!el) {
+        el = document.createElement("div");
+        el.id = id; el.className = "bubble " + who;
+        el.innerHTML = `<div class="bubble-who">${who === "agent" ? "Maya" : "You"}</div><div class="bubble-text"></div>`;
+        box.appendChild(el);
+    }
+    el.querySelector(".bubble-text").textContent = text;
+    if (fin) el.id = "";
+    box.scrollTop = box.scrollHeight;
+}
+
+function detectStage(t) {
+    const l = t.toLowerCase();
+    if (/past experience|walk me through|specific project|tell me about a time/.test(l)) stage(2);
+    if (/thank you for your time|wrap up|good luck|goodbye/.test(l)) stage(3);
+}
+
+function stage(n) {
+    const labels = ["Introduction","Experience","Wrap-up"];
+    stageLabel.textContent = labels[n-1] || "";
+    for (let i = 1; i <= 3; i++) {
+        const el = document.getElementById("b"+i);
+        el.className = "bar" + (i < n ? " done" : i === n ? " active" : "");
+    }
+}
+
+function mic() {
+    if (!room) return;
+    muted = !muted;
+    room.localParticipant.setMicrophoneEnabled(!muted);
+    micBtn.innerHTML = muted ? "🔇 Unmute" : "🎤 Mute";
+    micBtn.className = "ctrl-btn" + (muted ? " muted" : "");
+}
+
+async function end() {
+    if (room) await room.disconnect();
+    clearInterval(timerInt);
+    nav("off","Ended");
+    setTimeout(() => {
+        const el = document.createElement("div");
+        el.className = "bubble agent";
+        el.innerHTML = `<div class="bubble-who" style="color:var(--text-muted)">System</div>
+            <div class="bubble-text" style="color:var(--text-muted)">Interview ended. Refresh to start a new session.</div>`;
+        tx.appendChild(el);
+        tx.scrollTop = tx.scrollHeight;
+    }, 350);
+}
+
+function nav(s, t) {
+    document.getElementById("nav-dot").className = "dot " + s;
+    document.getElementById("nav-text").textContent = t;
+}
+
+function tick() {
+    const e = Math.floor((Date.now() - t0) / 1000);
+    timer.textContent = String(Math.floor(e/60)).padStart(2,"0") + ":" + String(e%60).padStart(2,"0");
+}
+
+nameIn.addEventListener("keyup", e => { if (e.key === "Enter") go(); });
+</script>
+</body>
+</html>

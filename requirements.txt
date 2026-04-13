@@ -1,0 +1,4 @@
+livekit-agents[openai,silero,deepgram,turn-detector]~=1.0
+livekit-api>=1.0.0
+python-dotenv>=1.0.0
+flask>=3.0.0
