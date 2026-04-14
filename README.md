@@ -42,8 +42,8 @@ A voice-powered AI interview coach that conducts realistic mock interviews using
 
 ```bash
 # Clone the repo
-git clone <repo-url>
-cd AI-MOCK-INTERVIEW
+git clone clone https://github.com/Ajaykumar496/ai-mock-interview.git
+cd ai-mock-interview
 
 # Create virtual environment
 python -m venv .venv
@@ -58,6 +58,9 @@ source .venv/bin/activate
 pip install -r requirements.txt
 
 # Configure environment variables
+# Windows:
+copy .env.example .env
+# macOS/Linux:
 cp .env.example .env
 # Edit .env and add your API keys
 ```
@@ -79,13 +82,15 @@ Open your browser at **http://localhost:5000**, type your name, click **Start In
 ## Project Structure
 
 ```
-AI-MOCK-INTERVIEW/
+ai-mock-interview/
 ├── templates/
-│   └── index.html          # Web frontend (LiveKit JS SDK)
-├── .env.example             # Environment variable template
-├── agent.py                 # AI interviewer — multi-agent logic
-├── server.py                # Flask server — token generation
-├── requirements.txt         # Python dependencies
+│   └── index.html        # Web frontend (LiveKit JS SDK)
+├── .env.example          # Environment variable template
+├── agent.py              # AI interviewer — multi-agent logic
+├── server.py             # Flask server — token generation
+├── requirements.txt      # Python dependencies
+├── voice-pipeline.png    # Architecture diagram
+├── multi-agent-flow.png  # Multi-agent flow diagram
 └── README.md
 ```
 
@@ -112,5 +117,4 @@ AI-MOCK-INTERVIEW/
 
 ## Author
 
-**AjayKumar Rachala**
-M.S. Computer Science — Virginia Commonwealth University (Dec 2025)
+**Ajay Kumar**
