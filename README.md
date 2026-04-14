@@ -13,30 +13,12 @@ A voice-powered AI interview coach that conducts realistic mock interviews using
 
 ## Architecture
 
-```
-You Speak → Deepgram Nova-3 (STT) → GPT-4o-mini (LLM) → OpenAI TTS-1-HD (TTS) → You Hear
-                                         ↑
-                              Silero VAD (voice detection)
-                              LiveKit Cloud (WebRTC transport)
-                              Flask (web server + tokens)
-```
+![Architecture](voice-pipeline.png)
 
 ### Multi-Agent Flow
 
-```
-┌──────────────────────┐     handoff     ┌──────────────────────┐     close     ┌──────────┐
-│  Self-Introduction   │ ──────────────→ │   Past Experience    │ ────────────→ │ Closing  │
-│  Agent (~2-3 min)    │  tool-based     │   Agent (~4-5 min)   │  tool-based   │ Feedback │
-│                      │                 │   STAR method        │               │          │
-│  • Greeting          │                 │   • Situation        │               │ Strengths│
-│  • Name/Background   │                 │   • Task             │               │ Tips     │
-│  • Motivation        │                 │   • Action           │               │ Goodbye  │
-└──────────────────────┘                 │   • Result           │               └──────────┘
-                                         └──────────────────────┘
-                                    ↑
-                         Timeout fallback watchdog
-                         (forces transition if tool-based handoff doesn't fire)
-```
+![Multi Agent Flow](multi-agent-flow.png)
+
 
 ## Tech Stack
 
