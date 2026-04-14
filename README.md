@@ -14,11 +14,8 @@ A voice-powered AI interview coach that conducts realistic mock interviews using
 ## Architecture
 
 ```
-You Speak → Deepgram Nova-3 (STT) → GPT-4o-mini (LLM) → OpenAI TTS-1-HD (TTS) → You Hear
-                                         ↑
-                              Silero VAD (voice detection)
-                              LiveKit Cloud (WebRTC transport)
-                              Flask (web server + tokens)
+## Architecture
+![Architecture](voice-pipeline.png)
 ```
 
 ### Multi-Agent Flow
