@@ -42,7 +42,7 @@ A voice-powered AI interview coach that conducts realistic mock interviews using
 
 ```bash
 # Clone the repo
-git clone clone https://github.com/Ajaykumar496/ai-mock-interview.git
+git clone https://github.com/Ajaykumar496/ai-mock-interview.git
 cd ai-mock-interview
 
 # Create virtual environment
